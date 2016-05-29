@@ -1,0 +1,37 @@
+This is the test map.
+This map is not to be used for the accual game.
+It is for testing purposes only.
+***
+iiiiiiiiiii
+iwwwwwwwwww
+iwffffffffw
+iwfffwffffw
+iwfffwwwwww
+iwffffffffw
+iwffffffffw
+iwfwwfffffw
+iwfwwfffwwww
+iwffffffffff
+iwwwwwwwwwww
+***
+00000000000
+00000000000
+00000000FF0
+00000000000
+00000000000
+00000000000
+000000n0000
+00000000000
+00000000000
+00000000dpd
+00000000000
+***
+viewSize=12
+***
+9,9:playerName=I need to be get a name
+10,9:leadsTo= hallway
+6,6:aiType= follow
+***
+8,2: h, h, h, t, h, t
+9,2: h, t, t, t, h, t
+***

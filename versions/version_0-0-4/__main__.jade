@@ -1,0 +1,236 @@
+doctype html
+html
+	-var settings = ['scale', 'squareSize', 'doublePressDelay']
+	-var menuButtons = ['save', 'settings', 'inventory', 'exit']
+	-var title = 'Project Tecnomancer'
+	-var isUsingCodeFile = false
+	if codeFileName
+		-isUsingCodeFile = true
+	head
+		meta(charset='utf-8')
+		script.
+			var Zip = require('adm-zip');
+			var isUsingCodeFile = !{isUsingCodeFile};
+			var modNames = '!{mods}'.split(',');
+			var fs = require('fs');
+			var mods = [];
+			var modDir = '!{modDir}';
+			var isDebugMode = !{isDebugMode};
+			var codeFileName = '!{codeFileName}';
+			var modExports;
+			if(isDebugMode){
+				var mainDir = '!{dir}!{zipName}';
+			}else{
+				var mainDir = '!{dir}!{zipName}.code';
+			}
+			var resources = {};
+			
+			function getAllFiles(dir){
+				if(isDebugMode){
+					function step(entries, subDir){
+						if(!entries){
+							entries = []
+						}
+						if(!subDir){
+							subDir = '';
+						}
+						for(name of fs.readdirSync(dir+'/'+subDir)){
+							stat = fs.statSync(dir+'/'+subDir+'/'+name);
+							if(stat.isDirectory()){
+								entries = step(entries, subDir+'/'+name)
+							}else if(stat.isFile()){
+								entry = {
+									name:subDir+'/'+name,
+									entryName:subDir+'/'+name,
+									_src: (dir+'/'+subDir+'/'+name),
+									getData(){
+										return fs.readFileSync(this._src);
+									}
+								}
+								entries.push(entry);
+							}
+						}
+						return entries;
+					}
+					var entries = step();
+					return entries;
+				}else{
+					var zip = new Zip(mainDir);
+					entries = zip.getEntries();
+					entries.sort(compareZipEntries);
+					return entries;
+				}
+			}
+			function readZippedFile(url) {
+				log('accessing '+url)
+				url = url.split('../').join('');
+				url = url.split('.')[0];
+				url = url.split('/').join('.');
+				
+				var evalString = 'window';
+				var objPropSectionArray = url.split('.');
+				for(var objPropSection of objPropSectionArray){
+					if(objPropSection.trim() != ''){
+						evalString += '["' + objPropSection + '"]';
+					}
+				}
+				var res = eval(evalString);
+				log('found something');
+				return res;
+			}
+
+			function addZippedFile(url, file) {
+				url = url.split('../').join('');
+				url = url.split('.')[0];
+				url = url.split('/').join('.');
+
+				fixedObjPropSetter(url, file);
+			}
+
+			function fixedObjPropSetter(objString, prop) {
+				try {
+					eval(objString);
+				} catch (e) {
+					var objArray = objString.split('.');
+					var objArray_ = [];
+					for (var i = 0; i < objArray.length - 1; i++) {
+						objArray_.push(objArray[i]);
+					}
+					fixedObjPropSetter(objArray_.join('.'), {})
+				} finally {
+					var evalString = 'window'
+					var objArray = objString.split('.');
+					for(var objPropSection of objArray){
+						if(objPropSection.trim() != ''){
+							evalString += '["' + objPropSection + '"]';
+						}
+					}
+					evalString += ' = prop';
+					eval(evalString);
+				}
+			}
+
+			function loadCode() {
+				if (isUsingCodeFile) {
+					var entries = getAllFiles(mainDir);
+					for (var entry of entries) {
+						switch (entry.name.split('.')[1]) {
+						case 'css':
+							var code = entry.getData().toString();
+							var style = document.createElement("style");
+							style.innerHTML = code;
+							document.getElementsByTagName("head")[0].appendChild(style);
+							log('loaded ' + entry.name);
+							break;
+						case 'js':
+							var code = entry.getData().toString();
+							var headID = document.getElementsByTagName("head")[0];
+							var script = document.createElement('script');
+							script.type = 'text/javascript';
+							script.innerHTML = code;
+							headID.appendChild(script);
+							log('loaded ' + entry.name);
+							break;
+						case 'map':
+						case 'json':
+							var data = entry.getData().toString();
+							addZippedFile(entry.entryName, data);
+							log('loaded ' + entry.name);
+							break;
+						case 'svg':
+							var data = entry.getData().toString();
+							var url = 'data:image/svg+xml,'+data;
+							addZippedFile(entry.entryName, url);
+							log('loaded ' + entry.name);
+							break;
+						case 'jpg':
+						case 'png':
+						case 'gif':
+							error('cannot load ' + entry.name + ', because it is an image not in svg format');
+							break;
+						case 'npm':
+							break;
+						default:
+							warn(entry.name + ' does not have a recognized file type');
+							break;
+						}
+					}
+				}
+				/*for (var modName of modNames){
+					var mod = new Mod(modName);
+					mods.push(mod);
+				}*/
+			}
+
+			function compareZipEntries(a, b) {
+				a = Number(a.name.split('_')[0].trim())
+				b = Number(b.name.split('_')[0].trim())
+				if(isNaN(a)){
+					a = 0;
+				}
+				if(isNaN(b)){
+					b = 0;
+				}
+				return a - b;
+			}
+			window.onload = function () {
+				loadCode();
+				onload();
+			}
+			function log(data){
+				console.log(data);
+			}
+			function error(data){
+				console.error(data);
+			}
+			function warn(data){
+				console.warn(data);
+			}
+		if !isUsingCodeFile
+			-var css = dir + 'main.css'
+			link(href=css rel='stylesheet' type='text/css/')
+			each script in scripts
+				-src = dir + script + '.js'
+				script(type='text/javascript' src=src)
+	body
+		canvas#renderCanvas HTML5 isn't working
+		nav.invisible
+			#menu: img
+			#gameMenu
+				each menuButton in menuButtons
+					button(id=menuButton)=menuButton
+		#mainMenu
+			h1= title
+			h3.warning
+				| Warning: This is 
+				span.strong Very
+				|  early testing
+			button#loadFromMainMenu load
+			button#exitFromMainMenu exit
+		#settingsMenu.invisible
+			.inline-block
+				each setting in settings
+					label= setting.replace(/([A-Z])/g, '-$1')
+			.inline-block
+				each setting in settings
+					input.settingInput(id=setting type='number')
+			br
+			button#settingsSave save settings
+			button.back back to game
+		#inventoryMenu.invisible
+			#inventoryInfo
+				h1#inventoryTitle
+				hr
+				button.back back
+				#equipSlots
+				hr
+				|  Mass:
+				p#mass
+				|  Volume:
+				p#volume
+			#inventoryNav
+			#inventoryCont
+		#loadMenu.invisible
+		.invisible
+			each setting in settings
+				var.setting= setting

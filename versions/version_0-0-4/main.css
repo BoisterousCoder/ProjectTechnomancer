@@ -1,0 +1,135 @@
+*{
+	-webkit-user-select: none;
+}
+p{
+	display: inline;
+	color: red;
+}
+body,
+div {
+    padding: 0;
+    margin: 0;
+}
+label {
+    display: block;
+}
+input {
+    display: block;
+}
+#menu {
+    background: none;
+    border: none;
+    width: 0.5in;
+}
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+#mainMenu {
+    text-align: center;
+}
+#renderCanvas {
+    margin: auto;
+	display: none;
+    cursor: crosshair;
+}
+button {
+    display: block;
+    width: 2in;
+    height: 0.5in;
+}
+#mainMenu button {
+    margin: auto;
+}
+#inventoryNav{
+	display: inline-block;
+	vertical-align: top;
+}
+#inventoryCont{
+	display: inline-block;
+	vertical-align: center;
+}
+#inventoryInfo{
+	display: block;
+	color: black;
+	background-color: yellow;
+}
+#inventoryMenu{
+	vertical-align: top;
+}
+.itemDisplay {
+	display: inline-block;
+	background-color: darkgrey;
+	vertical-align: center;
+	text-align: center;
+	border: medium black solid;
+	width: 1in;
+    height: 1in;
+}
+.itemDisplay img{
+	display: inline-block;
+	vertical-align: center;
+	width: 99%;
+    height: 99%;
+}
+.inventory{
+	display: block;
+	vertical-align: middle;
+}
+.warning {
+    color: red;
+    font-style: italic;
+}
+.strong {
+    font-weight: bolder;
+    font-style: normal;
+}
+.inline-block {
+    display: inline-block;
+    padding-right: 4%;
+}
+.invisible {
+	display: none;
+}
+#newGame {
+    vertical-align: bottom;
+}
+#settingsMenu {
+	color:white;
+	padding: 0.5in;
+}
+#settingsMenu input:invalid{
+	border-color: red;
+}
+#settingsMenu button{
+	display: inline-block;
+}
+.right{
+	float: right;
+}
+#loading{
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+.back{
+	background-color: red;
+	display: inline-block;
+	vertical-align: top;
+}
+#equipSlots{
+	display: inline-block;
+}
+.itemAmount{
+	color:yellow;
+	right: 0;
+	top: 0;
+	z-index: 10;
+	position: relative;
+}
+#inventoryTitle{
+	margin: 0; 
+}

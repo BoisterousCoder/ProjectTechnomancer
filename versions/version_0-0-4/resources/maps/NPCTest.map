@@ -1,0 +1,33 @@
+This is Nathan's NPC test area
+This map is not to be used for the actual game.
+It is for testing purposes only.
+***
+iiiiiiiiiii
+iwfwwwwwwww
+iwfwffffffw
+iwfwfwwwwfw
+iwfwfwffwfw
+iwfwfwffwfw
+iwfwffffwfw
+iwfwwwwwwfw
+iwffffffffw
+iwwwwwwwwww
+***
+00000000000
+00d00000000
+00p00000000
+00000000000
+0000000n000
+00000000000
+00000000000
+00000000000
+00000000000
+00000000000
+***
+viewSize=12
+***
+2,2:playerName=I need to be get a name
+2,1:leadsTo=hallway
+7,4:aiType=follow
+***
+***

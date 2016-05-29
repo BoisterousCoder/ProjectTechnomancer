@@ -1,0 +1,12 @@
+{
+	"symbol": "h",
+	"animation": "player/walk",
+	"volume": 2,
+	"mass": 180,
+	"equipType": "weapon",
+	"ability": "none",
+	"buffs":{
+		"energy": -1,
+		"resistance": 5
+	}
+}

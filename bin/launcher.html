@@ -1,0 +1,43 @@
+<!Doctype html>
+<html>
+
+<head>
+	<script src="launcher.js"></script>
+	<style>
+		body{
+			background-color: lightgrey;
+		}
+		#progressBarContainer{
+			width: 90%;
+			height: 0.3in;
+			border: solid black 0.02in;
+			margin: auto;
+		}
+		#progressBar{
+			height: 100%;
+			width: 0;
+			margin: 0;
+			background-color: blue;
+		}
+		span{
+			display: inline;
+		}
+		.warn{
+			color: gold;
+		}
+		.error{
+			color: red;
+		}
+		.log{
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	LOADING...
+	<div id='progressBarContainer'><div id='progressBar'></div></div>
+	<div id='console'></div>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+This is the test map.
+This map is not to be used for the accual game.
+It is for testing purposes only.
+***
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+i   wfw
+***
+00000d0
+00000p0
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000
+00000d0
+***
+viewSize=11
+***
+5,1:playerName=I need to be get a name
+5,0: leadsTo = test
+5,10:leadsTo = NPCTest
+***
+***

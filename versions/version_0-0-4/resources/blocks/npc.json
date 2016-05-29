@@ -1,0 +1,11 @@
+{
+	"symbol":"n",
+	"color":"blue",
+	"colide":true,
+	"isClickable": true,
+	"_width":0.6,
+	"_height":0.6,
+	"maxVolume": 20,
+	"_maxHeat": 100,
+	"heatRegen": 0.2
+}

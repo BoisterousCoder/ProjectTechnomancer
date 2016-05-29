@@ -1,0 +1,11 @@
+{
+	"symbol": "s",
+	"color": "brown",
+	"colide": true,
+	"_width": 0.2,
+	"_height": 1,
+	"displayWidth": 0.2,
+	"displayHeight": 1,
+	"hugWall":true,
+	"isClickable": true
+}

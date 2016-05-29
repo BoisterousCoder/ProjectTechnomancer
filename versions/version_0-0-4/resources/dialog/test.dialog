@@ -1,0 +1,13 @@
+[test dialog]
+1:What is your
+--name?
+==Bob
+--1:What a common name.
+==Joe
+--1:What a common name.
+==It is none
+--of your buisness
+--1:How rude.
+----I dont feel like talking any more.
+==Drake
+--1:What an odd name.

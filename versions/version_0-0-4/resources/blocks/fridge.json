@@ -1,0 +1,7 @@
+{
+	"symbol": "F",
+	"color": "white",
+	"colide": true,
+	"isClickable": true,
+	"maxVolume": 200
+}

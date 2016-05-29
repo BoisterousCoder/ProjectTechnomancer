@@ -1,0 +1,9 @@
+{
+	"bulletAnimation":"test",
+	"bulletSize":0.5,
+	"bulletSpeed":0.2,
+	"consumptionMult":10,
+	"attackType":"shoot",
+	"animations":["use", "idle"],
+	"attack":50
+}

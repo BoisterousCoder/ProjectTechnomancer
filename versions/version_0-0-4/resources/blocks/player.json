@@ -1,0 +1,12 @@
+{
+	"symbol": "p",
+	"color": "blue",
+	"colide": true,
+	"_width": 0.6,
+	"_height": 0.6,
+	"_animations": ["walk", "magic", "run", "still", "walkMagic"],
+	"maxVolume": 20,
+	"_maxHeat": 100,
+	"heatRegen": 0.2,
+	"equipSlots":["weapon", "glove", "armor"]
+}

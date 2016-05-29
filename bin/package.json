@@ -1,0 +1,25 @@
+{
+  "main": "launcher.html",
+  "name": "technomancer-project",
+  "description": "unknown, still in early stage",
+  "window": {
+    "icon": "../icon.png",
+    "resizable": true,
+    "toolbar": true,
+    "frame": true,
+    "position": "mouse",
+    "width": 900,
+    "height": 900
+  },
+  "keywords": [
+    "project",
+    "technomancer"
+  ],
+  "webkit": {
+    "plugin": false
+  },
+  "single-instance": true,
+  "dependencies": {
+    "npmi": "^2.0.1"
+  }
+}

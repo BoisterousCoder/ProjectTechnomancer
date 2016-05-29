@@ -1,0 +1,7 @@
+{
+	"ammo":"energy",
+	"attackType":"teleport",
+	"animations":["use", "idle"],
+	"attack":50,
+	"consumptionMult":2
+}

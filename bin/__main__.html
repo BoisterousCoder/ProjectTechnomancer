@@ -1,0 +1,177 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><script>var Zip = require('adm-zip');
+var isUsingCodeFile = true;
+var modNames = 'pythonMod'.split(',');
+var fs = require('fs');
+var mods = [];
+var modDir = '../mods/';
+var isDebugMode = true;
+var codeFileName = 'version_0-0-4';
+var modExports;
+if(isDebugMode){
+	var mainDir = '../versions/version_0-0-4';
+}else{
+	var mainDir = '../versions/version_0-0-4.code';
+}
+var resources = {};
+
+function getAllFiles(dir){
+	if(isDebugMode){
+		function step(entries, subDir){
+			if(!entries){
+				entries = []
+			}
+			if(!subDir){
+				subDir = '';
+			}
+			for(name of fs.readdirSync(dir+'/'+subDir)){
+				stat = fs.statSync(dir+'/'+subDir+'/'+name);
+				if(stat.isDirectory()){
+					entries = step(entries, subDir+'/'+name)
+				}else if(stat.isFile()){
+					entry = {
+						name:subDir+'/'+name,
+						entryName:subDir+'/'+name,
+						_src: (dir+'/'+subDir+'/'+name),
+						getData(){
+							return fs.readFileSync(this._src);
+						}
+					}
+					entries.push(entry);
+				}
+			}
+			return entries;
+		}
+		var entries = step();
+		return entries;
+	}else{
+		var zip = new Zip(mainDir);
+		entries = zip.getEntries();
+		entries.sort(compareZipEntries);
+		return entries;
+	}
+}
+function readZippedFile(url) {
+	log('accessing '+url)
+	url = url.split('../').join('');
+	url = url.split('.')[0];
+	url = url.split('/').join('.');
+	
+	var evalString = 'window';
+	var objPropSectionArray = url.split('.');
+	for(var objPropSection of objPropSectionArray){
+		if(objPropSection.trim() != ''){
+			evalString += '["' + objPropSection + '"]';
+		}
+	}
+	var res = eval(evalString);
+	log('found something');
+	return res;
+}
+
+function addZippedFile(url, file) {
+	url = url.split('../').join('');
+	url = url.split('.')[0];
+	url = url.split('/').join('.');
+
+	fixedObjPropSetter(url, file);
+}
+
+function fixedObjPropSetter(objString, prop) {
+	try {
+		eval(objString);
+	} catch (e) {
+		var objArray = objString.split('.');
+		var objArray_ = [];
+		for (var i = 0; i < objArray.length - 1; i++) {
+			objArray_.push(objArray[i]);
+		}
+		fixedObjPropSetter(objArray_.join('.'), {})
+	} finally {
+		var evalString = 'window'
+		var objArray = objString.split('.');
+		for(var objPropSection of objArray){
+			if(objPropSection.trim() != ''){
+				evalString += '["' + objPropSection + '"]';
+			}
+		}
+		evalString += ' = prop';
+		eval(evalString);
+	}
+}
+
+function loadCode() {
+	if (isUsingCodeFile) {
+		var entries = getAllFiles(mainDir);
+		for (var entry of entries) {
+			switch (entry.name.split('.')[1]) {
+			case 'css':
+				var code = entry.getData().toString();
+				var style = document.createElement("style");
+				style.innerHTML = code;
+				document.getElementsByTagName("head")[0].appendChild(style);
+				log('loaded ' + entry.name);
+				break;
+			case 'js':
+				var code = entry.getData().toString();
+				var headID = document.getElementsByTagName("head")[0];
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.innerHTML = code;
+				headID.appendChild(script);
+				log('loaded ' + entry.name);
+				break;
+			case 'map':
+			case 'json':
+				var data = entry.getData().toString();
+				addZippedFile(entry.entryName, data);
+				log('loaded ' + entry.name);
+				break;
+			case 'svg':
+				var data = entry.getData().toString();
+				var url = 'data:image/svg+xml,'+data;
+				addZippedFile(entry.entryName, url);
+				log('loaded ' + entry.name);
+				break;
+			case 'jpg':
+			case 'png':
+			case 'gif':
+				error('cannot load ' + entry.name + ', because it is an image not in svg format');
+				break;
+			case 'npm':
+				break;
+			default:
+				warn(entry.name + ' does not have a recognized file type');
+				break;
+			}
+		}
+	}
+	/*for (var modName of modNames){
+		var mod = new Mod(modName);
+		mods.push(mod);
+	}*/
+}
+
+function compareZipEntries(a, b) {
+	a = Number(a.name.split('_')[0].trim())
+	b = Number(b.name.split('_')[0].trim())
+	if(isNaN(a)){
+		a = 0;
+	}
+	if(isNaN(b)){
+		b = 0;
+	}
+	return a - b;
+}
+window.onload = function () {
+	loadCode();
+	onload();
+}
+function log(data){
+	console.log(data);
+}
+function error(data){
+	console.error(data);
+}
+function warn(data){
+	console.warn(data);
+}</script></head><body><canvas id="renderCanvas">HTML5 isn't working</canvas><nav class="invisible"><div id="menu"><img></div><div id="gameMenu"><button id="save">save</button><button id="settings">settings</button><button id="inventory">inventory</button><button id="exit">exit</button></div></nav><div id="mainMenu"><h1>Project Tecnomancer</h1><h3 class="warning">Warning: This is <span class="strong">Very</span> early testing</h3><button id="loadFromMainMenu">load</button><button id="exitFromMainMenu">exit</button></div><div id="settingsMenu" class="invisible"><div class="inline-block"><label>scale</label><label>square-Size</label><label>double-Press-Delay</label></div><div class="inline-block"><input id="scale" type="number" class="settingInput"><input id="squareSize" type="number" class="settingInput"><input id="doublePressDelay" type="number" class="settingInput"></div><br><button id="settingsSave">save settings</button><button class="back">back to game</button></div><div id="inventoryMenu" class="invisible"><div id="inventoryInfo"><h1 id="inventoryTitle"></h1><hr><button class="back">back</button><div id="equipSlots"></div><hr> Mass:<p id="mass"></p> Volume:<p id="volume"></p></div><div id="inventoryNav"></div><div id="inventoryCont"></div></div><div id="loadMenu" class="invisible"></div><div class="invisible"><var class="setting">scale</var><var class="setting">squareSize</var><var class="setting">doublePressDelay</var></div></body></html>
